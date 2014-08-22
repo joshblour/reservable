@@ -7,16 +7,16 @@ require "reservable/version"
 Gem::Specification.new do |s|
   s.name        = "reservable"
   s.version     = Reservable::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Reservable."
-  s.description = "TODO: Description of Reservable."
+  s.authors     = ["Yonah Forst"]
+  s.email       = ["yonaforst@hotmail.com"]
+  s.homepage    = "http://github.come/joshblour"
+  s.summary     = "Reserve any active record object for a day or range of days"
+  s.description = "Allows any active record model object (such as a room) be reserved (daily) by any other model object (such as a user or a booking)"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
 
-  s.add_dependency "rails", "~> 4.1.5"
+  s.add_dependency "rails", "~> 4.1"
 
   s.add_development_dependency "pg"
   s.add_development_dependency "rspec-rails"
