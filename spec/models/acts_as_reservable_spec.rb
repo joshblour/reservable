@@ -70,17 +70,17 @@ module Reservable
         expect(@available_rooms).to eq [@room2, @room3]
       end
 
-      # it 'parses string dates' do
-      #   expect {
-      #     @room.reserve(reserved_on: 2.days.from_now.to_s, reserver: @booking)
-      #     @room.unreserve(reserved_on: 2.days.from_now.to_s, reserver: @booking)
-      #     @room.reserve_range(reserved_from: Date.today.to_s, reserved_until: 3.days.from_now.to_s, reserver: @booking)
-      #     @room.unreserve_range(reserved_from: 2.days.from_now.to_s, reserved_until: 3.days.from_now.to_s, reserver: @booking)
-      #     Room.find_available(Date.today.to_s, "2014-12-05", 5)
-      #   }.not_to raise_error
-      #
-      # end
-      
+      it 'parses string dates' do
+        expect {
+          @room.reserve(reserved_on: 2.days.from_now.to_s, reserver: @booking)
+          @room.unreserve(reserved_on: 2.days.from_now.to_s, reserver: @booking)
+          @room.reserve_range(reserved_from: Date.today.to_s, reserved_until: 3.days.from_now.to_s, reserver: @booking)
+          @room.unreserve_range(reserved_from: 2.days.from_now.to_s, reserved_until: 3.days.from_now.to_s, reserver: @booking)
+          Room.find_available(from: Date.today.to_s, to: "2014-12-05", days: 5)
+        }.not_to raise_error
+
+      end
+
       
     
     end
