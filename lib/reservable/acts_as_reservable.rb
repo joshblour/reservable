@@ -48,6 +48,27 @@ module Reservable
         reservations = self.reservations.where(reserved_on: options[:reserved_from].to_date..options[:reserved_until].to_date)
         reservations.destroy_all
       end
+      
+      def reserved_dates= dates, **options
+        dates = dates.split(',') if dates.is_a? String
+        dates.map! {|d| d.is_a?(String) ? d.to_date : d }
+        
+        old_dates = reserved_dates - dates
+        new_dates = dates - reserved_dates
+        
+        self.reservations.where(reserved_on: old_dates).destroy_all
+        
+        new_dates.each do |date|
+          self.reservations.create(reserved_on: date, reserver: options[:reserver], reason: options[:reason])
+        end
+      end
+      
+      def reserved_dates
+        self.reservations.map(&:reserved_on)
+      end
+        
+         
+        
     end
   end
 end

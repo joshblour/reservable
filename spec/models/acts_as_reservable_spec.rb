@@ -18,6 +18,11 @@ module Reservable
         expect(@room).to have_many :reservations
       end
       
+      it 'adds reserved_dates getter and setter' do
+        expect(@room).to respond_to :reserved_dates
+        expect(@room).to respond_to :reserved_dates=
+      end
+      
       it 'has_many reservers through reservations' do
         expect(@room).to have_many :reservers
       end
@@ -31,8 +36,35 @@ module Reservable
           @room.reserve(reserved_on: 2.days.from_now.to_date, reserver: @booking)
         }.to change{@room.reservations.count}.by(1)
       end
-      
 
+      it 'adds reserved dates via reserved_dates= as array' do
+        date_array = 2.days.from_now.to_date..5.days.from_now.to_date
+        expect {
+          @room.assign_attributes(reserved_dates: date_array.to_a)
+        }.to change{@room.reservations.count}.by(4)
+      end
+            
+      it 'adds reserved dates via reserved_dates= as string' do
+        date_string = (2.days.from_now.to_date..5.days.from_now.to_date).map(&:to_s).join(',')
+        expect {
+          @room.assign_attributes(reserved_dates: date_string)
+        }.to change{@room.reservations.count}.by(4)
+      end
+      
+      it 'removes existing dates when setting via reserved_dates=' do
+        @room.reserve_range(reserved_from: 2.days.from_now.to_date, reserved_until: 5.days.from_now.to_date, reserver: @booking)
+        
+        date_string = (4.days.from_now.to_date..6.days.from_now.to_date).map(&:to_s).join(',')
+        expect {
+          @room.assign_attributes(reserved_dates: date_string)
+        }.to change{@room.reservations.count}.by(-1)
+        expect(@room.reservations.count).to eq 3
+      end
+      
+      it 'gets reserved dates via reserved_dates as array' do
+        @room.reserve_range(reserved_from: 2.days.from_now.to_date, reserved_until: 5.days.from_now.to_date, reserver: @booking)
+        expect(@room.reserved_dates).to match 2.days.from_now.to_date..5.days.from_now.to_date
+      end
       
       it 'removes a reservation' do
         @room.reservations.create(reserved_on: 2.days.from_now.to_date, reserver: @booking)
@@ -78,7 +110,6 @@ module Reservable
           @room.unreserve_range(reserved_from: 2.days.from_now.to_s, reserved_until: 3.days.from_now.to_s, reserver: @booking)
           Room.find_available(from: Date.today.to_s, to: "2014-12-05", days: 5)
         }.not_to raise_error
-
       end
 
       
