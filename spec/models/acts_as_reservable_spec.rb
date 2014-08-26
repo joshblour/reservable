@@ -40,14 +40,14 @@ module Reservable
       it 'adds reserved dates via reserved_dates= as array' do
         date_array = 2.days.from_now.to_date..5.days.from_now.to_date
         expect {
-          @room.assign_attributes(reserved_dates: date_array.to_a)
+          @room.update(reserved_dates: date_array.to_a)
         }.to change{@room.reservations.count}.by(4)
       end
             
       it 'adds reserved dates via reserved_dates= as string' do
         date_string = (2.days.from_now.to_date..5.days.from_now.to_date).map(&:to_s).join(',')
         expect {
-          @room.assign_attributes(reserved_dates: date_string)
+          @room.update(reserved_dates_string: date_string)
         }.to change{@room.reservations.count}.by(4)
       end
       
@@ -56,7 +56,7 @@ module Reservable
         
         date_string = (4.days.from_now.to_date..6.days.from_now.to_date).map(&:to_s).join(',')
         expect {
-          @room.assign_attributes(reserved_dates: date_string)
+          @room.update!(reserved_dates_string: date_string)
         }.to change{@room.reservations.count}.by(-1)
         expect(@room.reservations.count).to eq 3
       end
