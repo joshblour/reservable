@@ -63,7 +63,7 @@ module Reservable
       end
       
       def reserved_dates
-        self.reservations.map(&:reserved_on)
+        self.reservations.reject(&:marked_for_destruction?).map(&:reserved_on)
       end
       
       def reserved_dates_string
