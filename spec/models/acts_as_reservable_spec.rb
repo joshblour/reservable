@@ -89,7 +89,8 @@ module Reservable
       end
       
       it 'returns a list of reservations available for N consectutive days within a range' do
-      
+        Room.destroy_all #clear exsting rooms
+
         @room1 = create(:room)
         @room2 = create(:room)
         @room3 = create(:room)
