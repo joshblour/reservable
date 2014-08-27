@@ -22,7 +22,7 @@ module Reservable
         days = options[:days]
         interval_ids = Reservable::Reservation.invervals_between(from, to, days).where('reservable_type = :class', class: self.name).map(&:reservable_id)
         edge_ids = Reservable::Reservation.edges_between(from, to, days).where('reservable_type = :class', class: self.name).map(&:reservable_id)
-        missing_ids = self.unscoped.includes(:reservations).where.not('reservable_reservations.reserved_on BETWEEN :from and :to', from: from, to: to).references(:reservations).pluck(:id)
+        missing_ids = self.unscoped.includes(:reservations).where('NOT(reservable_reservations.reserved_on BETWEEN :from and :to) OR reservable_reservations IS NULL ', from: from, to: to).references(:reservations).pluck(:id)
         self.where(id: interval_ids + edge_ids + missing_ids)
       end
 
